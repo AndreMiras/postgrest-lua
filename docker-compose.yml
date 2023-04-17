@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  postgrest:
+    image: postgrest/postgrest
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    environment:
+      PGRST_DB_URI: postgres://postgres:password@db:5432/postgres
+      PGRST_DB_SCHEMA: api
+      PGRST_DB_ANON_ROLE: web_anon
+      PGRST_DB_POOL: 10
+      PGRST_SERVER_PROXY_URI: "http://127.0.0.1:3000/"
+      PGRST_JWT_SECRET: 27oAeYPHQfrmWQfOV9zRQLjlk20ROq7V
+    restart: unless-stopped
+
+  db:
+    image: postgres:13
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./:/host
+    restart: unless-stopped
+
+volumes:
+  db-data:
