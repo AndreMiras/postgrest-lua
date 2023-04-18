@@ -1,5 +1,7 @@
 # PostgREST Lua
 
+[![Unit tests](https://github.com/AndreMiras/postgrest-lua/actions/workflows/unittests.yml/badge.svg)](https://github.com/AndreMiras/postgrest-lua/actions/workflows/unittests.yml)
+
 Basic PostgREST Lua library.
 
 This is still at a very early stage of development and the API will certainly change.
@@ -27,6 +29,12 @@ local todos = supabase("todos"):select():execute()
 ## Development
 
 ### Tests
+
+Install dev dependencies:
+
+```sh
+luarocks/dev
+```
 
 Start the PostgreSQL database and the PostgREST service:
 
