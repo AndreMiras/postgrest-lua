@@ -13,6 +13,17 @@ jobs:
         with:
           luaVersion: "5.4"
       - uses: leafo/gh-actions-luarocks@v4
-      - run: make luarocks/dev
-      - run: luarocks make
+      - name: Install dependencies
+        run: |
+          make luarocks/dev
+          luarocks make
+      - name: Prepare database
+        run: |
+          make docker/compose/recreate
+          # seen time where the DB wasn't fully ready
+          sleep 1
+          make docker/compose/psql/init
+      - run: make test
       - run: make lint
+      - run: make docker/compose/down
+        if: always()
