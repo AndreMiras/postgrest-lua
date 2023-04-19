@@ -21,7 +21,7 @@ This is still at a very early stage of development and the API will certainly ch
 ## Install
 
 ```sh
-luarocks install --server=https://luarocks.org/dev postgrest
+luarocks install postgrest
 ```
 
 ## Usage
