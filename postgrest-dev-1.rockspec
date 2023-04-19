@@ -1,6 +1,6 @@
 package = "postgrest"
 version = "dev-1"
-source = {url = "git+ssh://git@github.com/AndreMiras/postgrest-lua.git"}
+source = {url = "git+https://github.com/AndreMiras/postgrest-lua"}
 description = {
     summary = "Basic PostgREST Lua library.",
     detailed = "Basic PostgREST Lua library.",

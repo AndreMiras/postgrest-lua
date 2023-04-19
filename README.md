@@ -1,6 +1,7 @@
 # PostgREST Lua
 
 [![Unit tests](https://github.com/AndreMiras/postgrest-lua/actions/workflows/unittests.yml/badge.svg)](https://github.com/AndreMiras/postgrest-lua/actions/workflows/unittests.yml)
+[![Publish](https://github.com/AndreMiras/postgrest-lua/actions/workflows/publish.yml/badge.svg)](https://github.com/AndreMiras/postgrest-lua/actions/workflows/publish.yml)
 
 Basic PostgREST Lua library.
 
@@ -16,6 +17,12 @@ This is still at a very early stage of development and the API will certainly ch
   - [ ] filtering
 - [ ] update support
 - [ ] delete support
+
+## Install
+
+```sh
+luarocks install --server=https://luarocks.org/dev postgrest
+```
 
 ## Usage
 
