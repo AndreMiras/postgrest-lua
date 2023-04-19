@@ -26,10 +26,23 @@ luarocks install --server=https://luarocks.org/dev postgrest
 
 ## Usage
 
+With PostgREST:
+
 ```lua
 local database = require("postgrest.database")
 local api_base_url = "http://localhost:3000"
 local supabase = database:new(api_base_url)
+local todos = supabase("todos"):select():execute()
+```
+
+With Supabase:
+
+```lua
+local database = require("postgrest.database")
+local service_role_key = os.getenv("SERVICE_ROLE_KEY")
+local auth_headers = {apikey = service_role_key}
+local api_base_url = "https://<project-id>.supabase.co"
+local supabase = database:new(api_base_url, auth_headers)
 local todos = supabase("todos"):select():execute()
 ```
 
@@ -46,7 +59,7 @@ luarocks/dev
 Start the PostgreSQL database and the PostgREST service:
 
 ```sh
-docker-compose start
+docker compose up
 ```
 
 Then run the tests:
