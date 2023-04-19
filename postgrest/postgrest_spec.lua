@@ -1,5 +1,5 @@
 -- integration tests
-local database = require("src.database")
+local database = require "postgrest.database"
 local cjson = require "cjson"
 
 local api_base_url = "http://localhost:3000"

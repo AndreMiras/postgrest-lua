@@ -29,21 +29,25 @@ luarocks install --server=https://luarocks.org/dev postgrest
 With PostgREST:
 
 ```lua
-local database = require("postgrest.database")
+local database = require "postgrest.database"
+local cjson = require "cjson"
 local api_base_url = "http://localhost:3000"
 local supabase = database:new(api_base_url)
 local todos = supabase("todos"):select():execute()
+cjson.encode(todos)
 ```
 
 With Supabase:
 
 ```lua
-local database = require("postgrest.database")
+local database = require "postgrest.database"
+local cjson = require "cjson"
 local service_role_key = os.getenv("SERVICE_ROLE_KEY")
 local auth_headers = {apikey = service_role_key}
 local api_base_url = "https://<project-id>.supabase.co"
 local supabase = database:new(api_base_url, auth_headers)
 local todos = supabase("todos"):select():execute()
+cjson.encode(todos)
 ```
 
 ## Development

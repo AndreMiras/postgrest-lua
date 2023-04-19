@@ -14,8 +14,7 @@ dependencies = {"lua-cjson >= 2.1", "http >= 0.4"}
 build = {
     type = "builtin",
     modules = {
-        database = "src/database.lua",
-        postgrest_spec = "src/postgrest_spec.lua",
-        query_builder = "src/query_builder.lua"
+        ["postgrest.database"] = "postgrest/database.lua",
+        ["postgrest.query_builder"] = "postgrest/query_builder.lua"
     }
 }

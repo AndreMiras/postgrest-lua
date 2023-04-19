@@ -34,13 +34,13 @@ luarocks/dev:
 	luarocks install --tree $(LUA_MODULES) --server=https://luarocks.org/dev luaformatter
 
 test:
-	$(BUSTED) src/
+	$(BUSTED) postgrest/
 
 lint/luacheck:
-	$(LUA_CHECK) src/*.lua
+	$(LUA_CHECK) postgrest/*.lua
 
 lint/luaformatter:
-	$(LUA_FORMAT) --check *.rockspec src/*.lua
+	$(LUA_FORMAT) --check *.rockspec postgrest/*.lua
 
 lint/nodeprettier:
 	$(NODE_PRETTIER) --check *.md docs/ .github/
@@ -48,7 +48,7 @@ lint/nodeprettier:
 lint: lint/luacheck lint/luaformatter
 
 format/luaformatter:
-	$(LUA_FORMAT) --in-place *.rockspec src/*.lua
+	$(LUA_FORMAT) --in-place *.rockspec postgrest/*.lua
 
 format/nodeprettier:
 	$(NODE_PRETTIER) --write *.md docs/ .github/
