@@ -43,7 +43,7 @@ lint/luaformatter:
 	$(LUA_FORMAT) --check *.rockspec src/*.lua
 
 lint/nodeprettier:
-	$(NODE_PRETTIER) --check *.md .github/
+	$(NODE_PRETTIER) --check *.md docs/ .github/
 
 lint: lint/luacheck lint/luaformatter
 
@@ -51,6 +51,6 @@ format/luaformatter:
 	$(LUA_FORMAT) --in-place *.rockspec src/*.lua
 
 format/nodeprettier:
-	$(NODE_PRETTIER) --write *.md .github/
+	$(NODE_PRETTIER) --write *.md docs/ .github/
 
 format: format/luaformatter format/nodeprettier
