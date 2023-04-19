@@ -2,15 +2,15 @@ local query_builder = require "src.query_builder"
 local Database = {}
 Database.__index = Database
 
-function Database:new(api_base_url, token)
+function Database:new(api_base_url, auth_headers)
     local s = setmetatable({}, self)
     s.api_base_url = api_base_url
-    s:auth(token)
+    s:auth(auth_headers)
     return s
 end
 
-function Database:auth(token)
-    self.token = token
+function Database:auth(auth_headers)
+    self.auth_headers = auth_headers
     return self
 end
 
