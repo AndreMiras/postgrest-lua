@@ -5,7 +5,9 @@ LUA_FORMAT=$(LUA_MODULES)/bin/lua-format
 NODE_PRETTIER=npx prettier
 define DEV_DEPENDENCIES
 busted \
-luacheck
+dkjson \
+luacheck \
+lunajson
 endef
 ifdef CI
 DOCKER_TTY=--no-TTY

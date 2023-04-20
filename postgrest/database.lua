@@ -1,4 +1,5 @@
 local query_builder = require "postgrest.query_builder"
+
 local Database = {}
 Database.__index = Database
 

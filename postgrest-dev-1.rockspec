@@ -10,7 +10,7 @@ description = {
     homepage = "https://github.com/AndreMiras/postgrest-lua",
     license = "MIT"
 }
-dependencies = {"lua-cjson >= 2.1", "http >= 0.4"}
+dependencies = {"http >= 0.4"}
 build = {
     type = "builtin",
     modules = {

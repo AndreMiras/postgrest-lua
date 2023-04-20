@@ -1,8 +1,10 @@
-local cjson = require "cjson"
+local utils = require "postgrest.utils"
 local http_request = require "http.request"
 
 local QueryBuilder = {}
 QueryBuilder.__index = QueryBuilder
+
+QueryBuilder.MISSING_JSON_IMPLEMENTATION_ERROR = "Missing JSON implementation"
 
 function QueryBuilder:new(database, table_name)
     local s = setmetatable({}, self)
@@ -22,7 +24,11 @@ local function add_headers(request, headers)
     return request
 end
 
-function QueryBuilder:execute()
+function QueryBuilder:execute(json_implementation)
+    json_implementation = json_implementation or utils.require_json()
+    if json_implementation == nil then
+        error(self.MISSING_JSON_IMPLEMENTATION_ERROR)
+    end
     local api_base_url = self.database.api_base_url
     local auth_headers = self.database.auth_headers
     local table_name = self.table_name
@@ -32,7 +38,7 @@ function QueryBuilder:execute()
     local headers, stream = assert(request:go())
     local body = assert(stream:get_body_as_string())
     if headers:get ":status" ~= "200" then error(body) end
-    return cjson.decode(body)
+    return json_implementation.decode(body)
 end
 
 return QueryBuilder

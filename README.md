@@ -24,6 +24,12 @@ This is still at a very early stage of development and the API will certainly ch
 luarocks install postgrest
 ```
 
+We also need to install one JSON library such as `cjson` or `dkjson`:
+
+```sh
+luarocks install dkjson
+```
+
 ## Usage
 
 With PostgREST:
@@ -42,12 +48,21 @@ With Supabase:
 ```lua
 local database = require "postgrest.database"
 local cjson = require "cjson"
-local service_role_key = os.getenv("SERVICE_ROLE_KEY")
-local auth_headers = {apikey = service_role_key}
-local api_base_url = "https://<project-id>.supabase.co"
+local project_id = os.getenv("SUPABASE_PROJECT_ID")
+local public_anon_key = os.getenv("SUPABASE_PUBLIC_ANON_KEY")
+local service_role_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+local api_base_url = "https://" .. project_id .. ".supabase.co"
+local auth_headers = {apikey = public_anon_key, authorization = "Bearer " .. service_role_key}
 local supabase = database:new(api_base_url, auth_headers)
-local todos = supabase("todos"):select():execute()
+local todos = supabase("rest/v1/todos"):select():execute()
 cjson.encode(todos)
+```
+
+Injecting a JSON library:
+
+```lua
+local lunajson = require 'lunajson'
+local todos = supabase("rest/v1/todos"):select():execute(lunajson)
 ```
 
 ## Development
