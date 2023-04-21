@@ -15,6 +15,7 @@ build = {
     type = "builtin",
     modules = {
         ["postgrest.database"] = "postgrest/database.lua",
-        ["postgrest.query_builder"] = "postgrest/query_builder.lua"
+        ["postgrest.query_builder"] = "postgrest/query_builder.lua",
+        ["postgrest.utils"] = "postgrest/utils.lua"
     }
 }
