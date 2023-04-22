@@ -15,7 +15,8 @@ function Database:auth(auth_headers)
     return self
 end
 
-function Database:__call(table_name) return query_builder:new(self, table_name) end
-Database.__call = Database.__call
+function Database:from(table_name) return query_builder:new(self, table_name) end
+
+function Database:__call(table_name) return self:from(table_name) end
 
 return Database

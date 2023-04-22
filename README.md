@@ -39,7 +39,7 @@ local database = require "postgrest.database"
 local cjson = require "cjson"
 local api_base_url = "http://localhost:3000"
 local supabase = database:new(api_base_url)
-local todos = supabase("todos"):select():execute()
+local todos = supabase:from("todos"):select():execute()
 cjson.encode(todos)
 ```
 
@@ -51,10 +51,10 @@ local cjson = require "cjson"
 local project_id = os.getenv("SUPABASE_PROJECT_ID")
 local public_anon_key = os.getenv("SUPABASE_PUBLIC_ANON_KEY")
 local service_role_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
-local api_base_url = "https://" .. project_id .. ".supabase.co"
+local api_base_url = "https://" .. project_id .. ".supabase.co/rest/v1/"
 local auth_headers = {apikey = public_anon_key, authorization = "Bearer " .. service_role_key}
 local supabase = database:new(api_base_url, auth_headers)
-local todos = supabase("rest/v1/todos"):select():execute()
+local todos = supabase:from("todos"):select():execute()
 cjson.encode(todos)
 ```
 
