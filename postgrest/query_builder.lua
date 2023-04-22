@@ -13,8 +13,12 @@ function QueryBuilder:new(database, table_name)
     return s
 end
 
-function QueryBuilder:select(columns)
-    self.columns = columns
+function QueryBuilder:select(columns, ...)
+    if type(columns) == "table" then
+        self.columns = columns
+    else
+        self.columns = {columns, ...}
+    end
     return self
 end
 
@@ -32,7 +36,10 @@ function QueryBuilder:execute(json_implementation)
     local api_base_url = self.database.api_base_url
     local auth_headers = self.database.auth_headers
     local table_name = self.table_name
-    local request = http_request.new_from_uri(api_base_url .. "/" .. table_name)
+    local columns = self.columns
+    local url = api_base_url .. "/" .. table_name .. "?"
+    if columns then url = url .. "select=" .. table.concat(self.columns, ",") end
+    local request = http_request.new_from_uri(url)
     request.headers:upsert("content-type", "application/json")
     add_headers(request, auth_headers)
     local headers, stream = assert(request:go())

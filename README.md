@@ -13,7 +13,7 @@ This is still at a very early stage of development and the API will certainly ch
 - [ ] insert support
 - [ ] select support
   - [x] basic (select wildcard)
-  - [ ] column selection
+  - [x] vertical filtering
   - [ ] filtering
 - [ ] update support
 - [ ] delete support

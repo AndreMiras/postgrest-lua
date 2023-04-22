@@ -21,6 +21,12 @@ describe("postgrest", function()
             assert.same(default_rows, todos)
         end)
 
+        it("should return all rows using *", function()
+            local supabase = database:new(api_base_url)
+            local todos = supabase:from("todos"):select("*"):execute()
+            assert.same(default_rows, todos)
+        end)
+
         it("from keyword can be skipped", function()
             local supabase = database:new(api_base_url)
             local todos = supabase("todos"):select():execute()
@@ -42,6 +48,17 @@ describe("postgrest", function()
             assert.stub(utils.require_json).was.called()
             utils.require_json:revert()
         end)
+
+        it("should allow vertical filtering", function()
+            local expected = {
+                {id = 1, task = "finish tutorial 0"},
+                {id = 2, task = "pat self on back"}
+            }
+            local supabase = database:new(api_base_url)
+            local todos = supabase:from("todos"):select("id", "task"):execute()
+            assert.same(expected, todos)
+        end)
+
     end)
 
 end)
