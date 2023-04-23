@@ -5,8 +5,8 @@ source = {
     branch = "main"
 }
 description = {
-    summary = "Basic PostgREST Lua library.",
-    detailed = "Basic PostgREST Lua library.",
+    summary = "PostgREST Lua library.",
+    detailed = "A PostgREST (and Supabase) library written in pure Lua",
     homepage = "https://github.com/AndreMiras/postgrest-lua",
     license = "MIT"
 }
