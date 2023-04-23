@@ -29,7 +29,7 @@ function QueryBuilder.key_to_operator(key)
                {column = key, operator = 'eq'}
 end
 
-function QueryBuilder:filter(kwargs)
+function QueryBuilder:filter_table(kwargs)
     local filter_table = {}
     for key, value in pairs(kwargs) do
         local column_and_operator = QueryBuilder.key_to_operator(key)
@@ -39,6 +39,16 @@ function QueryBuilder:filter(kwargs)
     end
     self.filter_str = table.concat(filter_table, "&")
     return self
+end
+
+function QueryBuilder:filter_raw(kwargs)
+    self.filter_str = kwargs
+    return self
+end
+
+function QueryBuilder:filter(kwargs)
+    return type(kwargs) == "table" and self:filter_table(kwargs) or
+               self:filter_raw(kwargs)
 end
 
 local function add_headers(request, headers)

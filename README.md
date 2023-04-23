@@ -9,7 +9,7 @@ Naive PostgREST Lua library.
 
 - [x] authentication support
 - [ ] insert support
-- [ ] select support
+- [x] select support
   - [x] basic (select wildcard)
   - [x] vertical filtering
   - [x] horizontal filtering
@@ -77,6 +77,8 @@ Horizontal filtering:
 supabase:from("todos"):select():filter{id__eq = 1}:execute()
 -- or alternatively
 supabase:from("todos"):select():filter{id = 1}:execute()
+-- or alternatively
+supabase:from("todos"):select():filter("id=eq.1"):execute()
 ```
 
 Same goes for other operators described in the PostgREST documentation:

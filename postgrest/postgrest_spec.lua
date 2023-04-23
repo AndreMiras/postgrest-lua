@@ -81,6 +81,14 @@ describe("postgrest", function()
             assert.same(expected, todos)
         end)
 
+        it("should allow raw filter expressions", function()
+            local expected = {{id = 1, task = "finish tutorial 0"}}
+            local supabase = database:new(api_base_url)
+            local todos = supabase:from("todos"):select("id", "task"):filter(
+                              "id=eq.1"):execute()
+            assert.same(expected, todos)
+        end)
+
     end)
 
 end)
