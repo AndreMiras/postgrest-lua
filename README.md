@@ -2,6 +2,7 @@
 
 [![Unit tests](https://github.com/AndreMiras/postgrest-lua/actions/workflows/unittests.yml/badge.svg)](https://github.com/AndreMiras/postgrest-lua/actions/workflows/unittests.yml)
 [![Publish](https://github.com/AndreMiras/postgrest-lua/actions/workflows/publish.yml/badge.svg)](https://github.com/AndreMiras/postgrest-lua/actions/workflows/publish.yml)
+[![LuaRocks](https://img.shields.io/luarocks/v/AndreMiras/postgrest)](https://luarocks.org/modules/AndreMiras/postgrest)
 
 Naive PostgREST Lua library.
 

@@ -34,7 +34,8 @@ function QueryBuilder:filter_table(kwargs)
     for key, value in pairs(kwargs) do
         local column_and_operator = QueryBuilder.key_to_operator(key)
         local filter_str = column_and_operator.column .. "=" ..
-                               column_and_operator.operator .. "." .. value
+                               column_and_operator.operator .. "." ..
+                               tostring(value)
         table.insert(filter_table, filter_str)
     end
     self.filter_str = table.concat(filter_table, "&")
