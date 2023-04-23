@@ -49,7 +49,8 @@ luarocks/dev:
 	for dependency in $(DEV_DEPENDENCIES); do \
 	luarocks install --tree $(LUA_MODULES) $$dependency ; \
 	done
-	luarocks install --tree $(LUA_MODULES) --server=https://luarocks.org/dev luaformatter
+	wget https://github.com/Koihik/vscode-lua-format/raw/ea490d1/bin/linux/lua-format -O $(LUA_FORMAT) && \
+	chmod +x $(LUA_FORMAT)
 
 release/prepare:
 	@# other variables derive from VERSION
