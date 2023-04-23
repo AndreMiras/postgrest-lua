@@ -13,9 +13,11 @@ CREATE TABLE api.todos (
 );
 
 -- Insert data only if the table is empty
-INSERT INTO api.todos (task)
+INSERT INTO api.todos (task, done)
 SELECT * FROM (VALUES
-  ('finish tutorial 0'), ('pat self on back')
+  ('finish tutorial 0', TRUE),
+  ('pat self on back', TRUE),
+  ('write the lua library', FALSE)
 ) AS t(task)
 WHERE NOT EXISTS (SELECT 1 FROM api.todos);
 

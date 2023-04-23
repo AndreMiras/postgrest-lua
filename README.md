@@ -3,9 +3,7 @@
 [![Unit tests](https://github.com/AndreMiras/postgrest-lua/actions/workflows/unittests.yml/badge.svg)](https://github.com/AndreMiras/postgrest-lua/actions/workflows/unittests.yml)
 [![Publish](https://github.com/AndreMiras/postgrest-lua/actions/workflows/publish.yml/badge.svg)](https://github.com/AndreMiras/postgrest-lua/actions/workflows/publish.yml)
 
-Basic PostgREST Lua library.
-
-This is still at a very early stage of development and the API will certainly change.
+Naive PostgREST Lua library.
 
 ## Roadmap
 
@@ -14,7 +12,7 @@ This is still at a very early stage of development and the API will certainly ch
 - [ ] select support
   - [x] basic (select wildcard)
   - [x] vertical filtering
-  - [ ] filtering
+  - [x] horizontal filtering
 - [ ] update support
 - [ ] delete support
 
@@ -64,6 +62,25 @@ Injecting a JSON library:
 local lunajson = require 'lunajson'
 local todos = supabase("rest/v1/todos"):select():execute(lunajson)
 ```
+
+Vertical filtering:
+
+```lua
+QueryBuilder:select("column1", "column2")
+-- or alternatively
+QueryBuilder:select{"column1", "column2"}
+```
+
+Horizontal filtering:
+
+```lua
+supabase:from("todos"):select():filter{id__eq = 1}:execute()
+-- or alternatively
+supabase:from("todos"):select():filter{id = 1}:execute()
+```
+
+Same goes for other operators described in the PostgREST documentation:
+https://postgrest.org/en/stable/api.html#operators
 
 ## Development
 
