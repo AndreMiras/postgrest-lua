@@ -1,0 +1,5 @@
+exclude = {
+   "lua_modules",
+   "/usr/share/lua",
+   "/home/runner/",
+}

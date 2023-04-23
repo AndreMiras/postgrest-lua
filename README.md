@@ -1,6 +1,7 @@
 # PostgREST Lua
 
 [![Unit tests](https://github.com/AndreMiras/postgrest-lua/actions/workflows/unittests.yml/badge.svg)](https://github.com/AndreMiras/postgrest-lua/actions/workflows/unittests.yml)
+[![Coverage Status](https://coveralls.io/repos/github/AndreMiras/postgrest-lua/badge.svg)](https://coveralls.io/github/AndreMiras/postgrest-lua)
 [![Publish](https://github.com/AndreMiras/postgrest-lua/actions/workflows/publish.yml/badge.svg)](https://github.com/AndreMiras/postgrest-lua/actions/workflows/publish.yml)
 [![LuaRocks](https://img.shields.io/luarocks/v/AndreMiras/postgrest)](https://luarocks.org/modules/AndreMiras/postgrest)
 
@@ -89,10 +90,10 @@ https://postgrest.org/en/stable/api.html#operators
 
 ### Tests
 
-Install dev dependencies:
+Install dependencies:
 
 ```sh
-luarocks/dev
+make luarocks
 ```
 
 Start the PostgreSQL database and the PostgREST service:

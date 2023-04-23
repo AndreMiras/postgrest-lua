@@ -13,10 +13,7 @@ jobs:
         with:
           luaVersion: "5.4"
       - uses: leafo/gh-actions-luarocks@v4
-      - name: Install dependencies
-        run: |
-          make luarocks/dev
-          luarocks make
+      - run: make luarocks
       - name: Prepare database
         run: |
           make docker/compose/recreate
@@ -24,6 +21,9 @@ jobs:
           sleep 1
           make docker/compose/psql/init
       - run: make test
+      - run: make coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
       - run: make lint
       - run: make docker/compose/down
         if: always()

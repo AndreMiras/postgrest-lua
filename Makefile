@@ -2,13 +2,16 @@ LUA_MODULES ?= lua_modules
 BUSTED=$(LUA_MODULES)/bin/busted
 LUA_CHECK=$(LUA_MODULES)/bin/luacheck
 LUA_FORMAT=$(LUA_MODULES)/bin/lua-format
+LUA_COVERALLS=$(LUA_MODULES)/bin/luacov-coveralls
 FULL_VERSION=$(VERSION)-1
 ROCKSPEC=rockspecs/postgrest-$(FULL_VERSION).rockspec
+ROCKSPEC_DEV=postgrest-dev-1.rockspec
 NODE_PRETTIER=npx prettier
 define DEV_DEPENDENCIES
 busted \
 dkjson \
 luacheck \
+luacov-coveralls \
 lunajson
 endef
 ifdef CI
@@ -52,10 +55,15 @@ luarocks/dev:
 	wget https://github.com/Koihik/vscode-lua-format/raw/ea490d1/bin/linux/lua-format -O $(LUA_FORMAT) && \
 	chmod +x $(LUA_FORMAT)
 
+luarocks/deps:
+	luarocks install --only-deps --tree $(LUA_MODULES) $(ROCKSPEC_DEV)
+
+luarocks: luarocks/dev luarocks/deps
+
 release/prepare:
 	@# other variables derive from VERSION
 	@:$(call check_defined, VERSION)
-	cp postgrest-dev-1.rockspec $(ROCKSPEC)
+	cp $(ROCKSPEC_DEV) $(ROCKSPEC)
 	sed 's/version = "dev-1"/version = "'$(FULL_VERSION)'"/' --in-place $(ROCKSPEC)
 	sed 's/branch = "main"/tag = "'$(VERSION)'"/' --in-place $(ROCKSPEC)
 
@@ -74,7 +82,10 @@ release/push:
 release: release/prepare release/commit release/push
 
 test:
-	$(BUSTED) postgrest/
+	$(BUSTED) --coverage postgrest/
+
+coveralls:
+	$(LUA_COVERALLS) --verbose
 
 lint/luacheck:
 	$(LUA_CHECK) postgrest/*.lua
