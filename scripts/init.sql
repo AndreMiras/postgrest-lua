@@ -3,23 +3,33 @@
 -- Create schema if it doesn't exist
 CREATE SCHEMA IF NOT EXISTS api;
 
--- Create table
-DROP TABLE IF EXISTS api.todos;
-CREATE TABLE api.todos (
-  id serial primary key,
-  done boolean not null default false,
-  task text not null,
-  due timestamptz
-);
+-- Useful to reset the table after the integration tests
+CREATE OR REPLACE PROCEDURE create_and_populate_todos()
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  -- Create table
+  DROP TABLE IF EXISTS api.todos;
+  CREATE TABLE api.todos (
+    id serial primary key,
+    done boolean not null default false,
+    task text not null,
+    due timestamptz
+  );
 
--- Insert data only if the table is empty
-INSERT INTO api.todos (task, done)
-SELECT * FROM (VALUES
-  ('finish tutorial 0', TRUE),
-  ('pat self on back', TRUE),
-  ('write the lua library', FALSE)
-) AS t(task)
-WHERE NOT EXISTS (SELECT 1 FROM api.todos);
+  -- Insert data only if the table is empty
+  IF (SELECT COUNT(*) FROM api.todos) = 0 THEN
+    INSERT INTO api.todos (task, done)
+    SELECT * FROM (VALUES
+      ('finish tutorial 0', TRUE),
+      ('pat self on back', TRUE),
+      ('write the lua library', FALSE)
+    ) AS t(task, done);
+  END IF;
+END;
+$$;
+
+CALL create_and_populate_todos();
 
 -- Revoke privileges if they were granted before
 DO $$ BEGIN
