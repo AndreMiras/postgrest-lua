@@ -12,6 +12,7 @@ busted \
 dkjson \
 luacheck \
 luacov-coveralls \
+luajwtjitsi \
 lunajson
 endef
 ifdef CI
@@ -46,7 +47,9 @@ docker/compose/psql:
 	docker compose exec db psql --username postgres
 
 docker/compose/psql/init:
-	docker compose exec $(DOCKER_TTY) db psql --set ON_ERROR_STOP=1 --username postgres --file /host/scripts/init.sql
+	docker compose exec $(DOCKER_TTY) db \
+	psql --set ON_ERROR_STOP=1 --username postgres --file /host/scripts/init.sql && \
+	docker compose restart postgrest
 
 luarocks/dev:
 	for dependency in $(DEV_DEPENDENCIES); do \

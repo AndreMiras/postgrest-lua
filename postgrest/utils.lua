@@ -11,4 +11,10 @@ function utils.require_json()
     end
 end
 
+function utils.table_length(tabl)
+    local count = 0
+    for _ in pairs(tabl) do count = count + 1 end
+    return count
+end
+
 return utils

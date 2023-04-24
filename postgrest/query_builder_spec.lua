@@ -10,7 +10,7 @@ describe("query_builder", function()
             local table_name = nil
             local query_builder = QueryBuilder:new(database, table_name)
             query_builder:select("foo", "bar")
-            assert.same(expected_columns, query_builder.columns)
+            assert.same(expected_columns, query_builder.select_columns)
             assert.same(expected_select_str, query_builder.select_str)
         end)
 
@@ -22,7 +22,7 @@ describe("query_builder", function()
             local columns = {"foo", "bar"}
             local query_builder = QueryBuilder:new(database, table_name)
             query_builder:select(columns)
-            assert.same(expected_columns, query_builder.columns)
+            assert.same(expected_columns, query_builder.select_columns)
             assert.same(expected_select_str, query_builder.select_str)
         end)
 
@@ -34,7 +34,7 @@ describe("query_builder", function()
             local columns = {}
             local query_builder = QueryBuilder:new(database, table_name)
             query_builder:select(columns)
-            assert.same(expected_columns, query_builder.columns)
+            assert.same(expected_columns, query_builder.select_columns)
             assert.same(expected_select_str, query_builder.select_str)
         end)
 
@@ -46,7 +46,7 @@ describe("query_builder", function()
             local columns = nil
             local query_builder = QueryBuilder:new(database, table_name)
             query_builder:select(columns)
-            assert.same(expected_columns, query_builder.columns)
+            assert.same(expected_columns, query_builder.select_columns)
             assert.same(expected_select_str, query_builder.select_str)
         end)
     end)

@@ -15,9 +15,10 @@ Naive PostgREST Lua library.
   - [x] basic (select wildcard)
   - [x] vertical filtering
   - [x] horizontal filtering
-- [ ] update support
+- [x] update support
 - [ ] delete support
 - [ ] async support
+- [ ] RPC support
 
 ## Install
 
@@ -41,6 +42,8 @@ local cjson = require "cjson"
 local api_base_url = "http://localhost:3000"
 local database = Database:new(api_base_url)
 local todos = database:from("todos"):select():execute()
+-- or alternatively
+local todos = database("todos"):select():execute()
 cjson.encode(todos)
 ```
 
@@ -62,8 +65,9 @@ cjson.encode(todos)
 Injecting a JSON library:
 
 ```lua
-local lunajson = require 'lunajson'
-local todos = supabase("rest/v1/todos"):select():execute(lunajson)
+local lunajson = require "lunajson"
+database:set_json_implementation(lunajson)
+local todos = database:from("todos"):select():execute()
 ```
 
 Vertical filtering:
@@ -77,15 +81,22 @@ QueryBuilder:select{"column1", "column2"}
 Horizontal filtering:
 
 ```lua
-supabase:from("todos"):select():filter{id__eq = 1}:execute()
+database:from("todos"):select():filter{id__eq = 1}:execute()
 -- or alternatively
-supabase:from("todos"):select():filter{id = 1}:execute()
+database:from("todos"):select():filter{id = 1}:execute()
 -- or alternatively
-supabase:from("todos"):select():filter("id=eq.1"):execute()
+database:from("todos"):select():filter("id=eq.1"):execute()
 ```
 
 Same goes for other operators described in the PostgREST documentation:
 https://postgrest.org/en/stable/api.html#operators
+
+Updates:
+
+```lua
+local values = {done = true, task = "learn lua"}
+database:from("todos"):update(values):execute()
+```
 
 ## Development
 

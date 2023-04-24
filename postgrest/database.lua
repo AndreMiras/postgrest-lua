@@ -1,4 +1,6 @@
+local constants = require "postgrest.constants"
 local query_builder = require "postgrest.query_builder"
+local utils = require "postgrest.utils"
 
 local Database = {}
 Database.__index = Database
@@ -13,6 +15,19 @@ end
 function Database:auth(auth_headers)
     self.auth_headers = auth_headers
     return self
+end
+
+function Database:set_json_implementation(json_implementation)
+    self.json_implementation = json_implementation
+    return self
+end
+
+function Database:get_json_implementation_or_error()
+    local json_implementation = self.json_implementation or utils.require_json()
+    if json_implementation == nil then
+        error(constants.MISSING_JSON_IMPLEMENTATION_ERROR)
+    end
+    return json_implementation
 end
 
 function Database:from(table_name) return query_builder:new(self, table_name) end
