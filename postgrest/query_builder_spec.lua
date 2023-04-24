@@ -64,5 +64,39 @@ describe("query_builder", function()
         end)
     end)
 
+    describe("filter", function()
+
+        it("should work with basic filtering", function()
+            local filter = {id = 1}
+            local expected = "id=eq.1"
+            local database = nil
+            local table_name = nil
+            local query_builder = QueryBuilder:new(database, table_name)
+            query_builder:filter(filter)
+            assert.same(expected, query_builder.filter_str)
+        end)
+
+        it("should work with an operator", function()
+            local filter = {id__eq = 1}
+            local expected = "id=eq.1"
+            local database = nil
+            local table_name = nil
+            local query_builder = QueryBuilder:new(database, table_name)
+            query_builder:filter(filter)
+            assert.same(expected, query_builder.filter_str)
+        end)
+
+        it("should work with a raw filter", function()
+            local filter = "id=eq.1"
+            local expected = filter
+            local database = nil
+            local table_name = nil
+            local query_builder = QueryBuilder:new(database, table_name)
+            query_builder:filter(filter)
+            assert.same(expected, query_builder.filter_str)
+        end)
+
+    end)
+
 end)
 

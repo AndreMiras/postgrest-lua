@@ -17,6 +17,7 @@ Naive PostgREST Lua library.
   - [x] horizontal filtering
 - [ ] update support
 - [ ] delete support
+- [ ] async support
 
 ## Install
 
