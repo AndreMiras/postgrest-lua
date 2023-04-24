@@ -19,6 +19,8 @@ function QueryBuilder:select(columns, ...)
     else
         self.columns = {columns, ...}
     end
+    self.select_str = #self.columns > 0 and "select=" ..
+                          table.concat(self.columns, ",") or ""
     return self
 end
 
@@ -67,11 +69,15 @@ function QueryBuilder:execute(json_implementation)
     local api_base_url = self.database.api_base_url
     local auth_headers = self.database.auth_headers
     local table_name = self.table_name
-    local columns = self.columns
+    local select_str = self.select_str
     local filter_str = self.filter_str
-    local url = api_base_url .. "/" .. table_name .. "?"
-    if columns then url = url .. "select=" .. table.concat(self.columns, ",") end
-    if filter_str then url = url .. "&" .. filter_str end
+    local url = api_base_url .. "/" .. table_name
+    local query_parameters = {}
+    if select_str then table.insert(query_parameters, select_str) end
+    if filter_str then table.insert(query_parameters, filter_str) end
+    if #query_parameters > 0 then
+        url = url .. "?" .. table.concat(query_parameters, "&")
+    end
     local request = http_request.new_from_uri(url)
     request.headers:upsert("content-type", "application/json")
     QueryBuilder.add_headers(request, auth_headers)
