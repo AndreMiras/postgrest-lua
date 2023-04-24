@@ -1,4 +1,5 @@
 local QueryBuilder = require "postgrest.query_builder"
+local http_request = require "http.request"
 
 describe("query_builder", function()
 
@@ -37,6 +38,29 @@ describe("query_builder", function()
             local key = "foobar"
             local column_and_operator = QueryBuilder.key_to_operator(key)
             assert.same(expected, column_and_operator)
+        end)
+    end)
+
+    describe("add_headers", function()
+
+        it("should work no headers", function()
+            local url = "http://localhost"
+            local request = http_request.new_from_uri(url)
+            local default_len = request.headers:len()
+            local headers = nil
+            local returned_request = QueryBuilder.add_headers(request, headers)
+            assert.same(request, returned_request)
+            assert.equal(request.headers:len(), default_len)
+        end)
+
+        it("should upsert headers", function()
+            local url = "http://localhost"
+            local request = http_request.new_from_uri(url)
+            local default_len = request.headers:len()
+            local headers = {key1 = "value1", key2 = "value2"}
+            local returned_request = QueryBuilder.add_headers(request, headers)
+            assert.same(request, returned_request)
+            assert.equal(request.headers:len(), default_len + 2)
         end)
     end)
 

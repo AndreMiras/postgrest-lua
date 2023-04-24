@@ -52,7 +52,8 @@ function QueryBuilder:filter(kwargs)
                self:filter_raw(kwargs)
 end
 
-local function add_headers(request, headers)
+-- mutate the request headers by upserting
+function QueryBuilder.add_headers(request, headers)
     if not headers then return request end
     for key, value in pairs(headers) do request.headers:upsert(key, value) end
     return request
@@ -73,7 +74,7 @@ function QueryBuilder:execute(json_implementation)
     if filter_str then url = url .. "&" .. filter_str end
     local request = http_request.new_from_uri(url)
     request.headers:upsert("content-type", "application/json")
-    add_headers(request, auth_headers)
+    QueryBuilder.add_headers(request, auth_headers)
     local headers, stream = assert(request:go())
     local body = assert(stream:get_body_as_string())
     if headers:get ":status" ~= "200" then error(body) end
