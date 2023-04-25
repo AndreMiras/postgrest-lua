@@ -14,7 +14,9 @@ dependencies = {"http >= 0.4"}
 build = {
     type = "builtin",
     modules = {
+        ["postgrest.constants"] = "postgrest/constants.lua",
         ["postgrest.database"] = "postgrest/database.lua",
+        ["postgrest.filter_builder"] = "postgrest/filter_builder.lua",
         ["postgrest.query_builder"] = "postgrest/query_builder.lua",
         ["postgrest.utils"] = "postgrest/utils.lua"
     }
