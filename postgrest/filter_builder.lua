@@ -16,8 +16,9 @@ function FilterBuilder:new(database, table_name, method, query_parameters,
 end
 
 -- decompose the key to comlumn and operator
+-- operator default to "eq" if not found
 function FilterBuilder.key_to_operator(key)
-    local column, operator = key:match('^(.-)__?(.*)$')
+    local column, operator = key:match("^(.-)__([^_]+)$")
     return operator and {column = column, operator = operator} or
                {column = key, operator = 'eq'}
 end

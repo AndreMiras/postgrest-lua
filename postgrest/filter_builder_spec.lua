@@ -18,6 +18,21 @@ describe("filter_builder", function()
             local column_and_operator = FilterBuilder.key_to_operator(key)
             assert.same(expected, column_and_operator)
         end)
+
+        it("should work with single underscore", function()
+            local expected = {column = "foo_bar", operator = "eq"}
+            local key = "foo_bar"
+            local column_and_operator = FilterBuilder.key_to_operator(key)
+            assert.same(expected, column_and_operator)
+        end)
+
+        it("should work with single underscore and an operator", function()
+            local expected = {column = "foo_bar", operator = "lte"}
+            local key = "foo_bar__lte"
+            local column_and_operator = FilterBuilder.key_to_operator(key)
+            assert.same(expected, column_and_operator)
+        end)
+
     end)
 
     describe("add_headers", function()
