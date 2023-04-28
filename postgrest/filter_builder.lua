@@ -1,5 +1,6 @@
 local utils = require "postgrest.utils"
 local http_request = require "http.request"
+local http_util = require "http.util"
 
 local FilterBuilder = {}
 FilterBuilder.__index = FilterBuilder
@@ -23,27 +24,34 @@ function FilterBuilder.key_to_operator(key)
                {column = key, operator = 'eq'}
 end
 
-function FilterBuilder:filter_table(kwargs)
+function FilterBuilder.quoted(value) return '"' .. value .. '"' end
+
+function FilterBuilder.quote_if_string(value)
+    return type(value) == "string" and FilterBuilder.quoted(value) or value
+end
+
+function FilterBuilder.to_postgrest_string(value)
+    return type(value) == "table" and "(" ..
+               table.concat(utils.map(FilterBuilder.quote_if_string, value), ",") ..
+               ")" or tostring(value)
+end
+
+function FilterBuilder.filter_table(kwargs)
     local filter_table = {}
     for key, value in pairs(kwargs) do
         local column_and_operator = FilterBuilder.key_to_operator(key)
         local filter_str = column_and_operator.column .. "=" ..
                                column_and_operator.operator .. "." ..
-                               tostring(value)
+                               FilterBuilder.to_postgrest_string(value)
         table.insert(filter_table, filter_str)
     end
-    self.filter_str = table.concat(filter_table, "&")
-    return self
-end
-
-function FilterBuilder:filter_raw(kwargs)
-    self.filter_str = kwargs
-    return self
+    return table.concat(filter_table, "&")
 end
 
 function FilterBuilder:filter(kwargs)
-    return type(kwargs) == "table" and self:filter_table(kwargs) or
-               self:filter_raw(kwargs)
+    self.filter_str = type(kwargs) == "table" and self.filter_table(kwargs) or
+                          kwargs
+    return self
 end
 
 -- mutate the request headers by upserting
@@ -76,7 +84,7 @@ function FilterBuilder:execute()
     if utils.table_length(query_parameters) > 0 then
         url = url .. "?" .. table.concat(query_parameters, "&")
     end
-    local request = http_request.new_from_uri(url)
+    local request = http_request.new_from_uri(http_util.encodeURI(url))
     request.headers:upsert("content-type", "application/json")
     request.headers:upsert(":method", method)
     FilterBuilder.add_headers(request, auth_headers)

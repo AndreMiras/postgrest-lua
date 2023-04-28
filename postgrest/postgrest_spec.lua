@@ -128,6 +128,22 @@ describe("postgrest", function()
             assert.same(expected, todos)
         end)
 
+        it("should allow horizontal filtering in operator", function()
+            local expected = {
+                {id = 2, done = true, task = "pat self on back"},
+                {id = 3, done = true, task = "learn how to auth"}
+            }
+            local database = Database:new(api_base_url)
+            local todos = database:from("todos"):select("id", "task", "done")
+                              :filter{id__in = {2, 3}}:execute()
+            assert.same(expected, todos)
+            -- should also work with strings
+            todos = database:from("todos"):select("id", "task", "done"):filter{
+                task__in = {"pat self on back", "learn how to auth"}
+            }:execute()
+            assert.same(expected, todos)
+        end)
+
     end)
 
     describe("update", function()

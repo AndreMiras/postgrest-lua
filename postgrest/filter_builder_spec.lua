@@ -90,6 +90,26 @@ describe("filter_builder", function()
             assert.same(expected, filter_builder.filter_str)
         end)
 
+        it("should work with a raw a list of numbers", function()
+            local filter = {id__in = {1, 2, 3}}
+            local expected = "id=in.(1,2,3)"
+            local database = nil
+            local table_name = nil
+            local filter_builder = FilterBuilder:new(database, table_name)
+            filter_builder:filter(filter)
+            assert.same(expected, filter_builder.filter_str)
+        end)
+
+        it("should work with a raw a list of strings", function()
+            local filter = {id__in = {"foo", "bar", "foo,bar"}}
+            local expected = 'id=in.("foo","bar","foo,bar")'
+            local database = nil
+            local table_name = nil
+            local filter_builder = FilterBuilder:new(database, table_name)
+            filter_builder:filter(filter)
+            assert.same(expected, filter_builder.filter_str)
+        end)
+
     end)
 
 end)

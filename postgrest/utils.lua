@@ -17,4 +17,10 @@ function utils.table_length(tabl)
     return count
 end
 
+function utils.map(func, tabl)
+    local new_t = {}
+    for i, v in ipairs(tabl) do new_t[i] = func(v) end
+    return new_t
+end
+
 return utils

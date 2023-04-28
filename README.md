@@ -86,6 +86,8 @@ database:from("todos"):select():filter{id__eq = 1}:execute()
 database:from("todos"):select():filter{id = 1}:execute()
 -- or alternatively
 database:from("todos"):select():filter("id=eq.1"):execute()
+-- we also support the `in` operator using tables:
+database:from("todos"):select():filter{id__in = {1, 2, 3}}:execute()
 ```
 
 Same goes for other operators described in the PostgREST documentation:
