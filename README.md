@@ -16,7 +16,7 @@ A Lua library for PostgREST.
   - [x] vertical filtering
   - [x] horizontal filtering
 - [x] update support
-- [ ] delete support
+- [x] delete support
 - [ ] RPC support
 
 ## Install
@@ -104,6 +104,12 @@ Updates:
 ```lua
 local values = {done = true, task = "learn lua"}
 database:from("todos"):update(values):execute()
+```
+
+Delete:
+
+```lua
+database:from("todos"):delete():filter{id = 4}:execute()
 ```
 
 ## Development

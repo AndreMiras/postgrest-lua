@@ -252,4 +252,41 @@ describe("postgrest", function()
 
     end)
 
+    describe("delete", function()
+
+        local token = jwt_encode("todo_user")
+
+        after_each(function() restore_database() end)
+
+        it("should not have the permission to delete", function()
+            local database = Database:new(api_base_url)
+            local error_message =
+                'Request failed with status: 401 and body: ' ..
+                    '{"code":"42501","details":null,"hint":null,' ..
+                    '"message":"permission denied for table todos"}'
+            assert.has.errors(function()
+                database:from("todos"):delete():execute()
+            end, error_message)
+            -- data is unchanged
+            local todos = database:from("todos"):select():execute()
+            assert.same(default_rows, todos)
+        end)
+
+        it("should delete a row", function()
+            local auth_headers = {authorization = "Bearer " .. token}
+            local database = Database:new(api_base_url, auth_headers)
+            local todos = database:from("todos"):select("id", "done", "task")
+                              :filter{id = 4}:execute()
+            -- row should exist before deleting
+            assert.same(
+                {{id = 4, done = false, task = "write the lua library"}}, todos)
+            database:from("todos"):delete():filter{id = 4}:execute()
+            todos = database:from("todos"):select("id", "done", "task"):filter{
+                id = 4
+            }:execute()
+            assert.same({}, todos)
+        end)
+
+    end)
+
 end)

@@ -43,4 +43,10 @@ function QueryBuilder:insert(values)
                              self.query_parameters, self.payload)
 end
 
+function QueryBuilder:delete()
+    self.method = "DELETE"
+    return FilterBuilder:new(self.database, self.table_name, self.method,
+                             self.query_parameters, self.payload)
+end
+
 return QueryBuilder
