@@ -5,19 +5,18 @@
 [![Publish](https://github.com/AndreMiras/postgrest-lua/actions/workflows/publish.yml/badge.svg)](https://github.com/AndreMiras/postgrest-lua/actions/workflows/publish.yml)
 [![LuaRocks](https://img.shields.io/luarocks/v/AndreMiras/postgrest)](https://luarocks.org/modules/AndreMiras/postgrest)
 
-Naive PostgREST Lua library.
+A Lua library for PostgREST.
 
 ## Roadmap
 
 - [x] authentication support
-- [ ] insert support
+- [x] insert support
 - [x] select support
   - [x] basic (select wildcard)
   - [x] vertical filtering
   - [x] horizontal filtering
 - [x] update support
 - [ ] delete support
-- [ ] async support
 - [ ] RPC support
 
 ## Install
@@ -68,6 +67,13 @@ Injecting a JSON library:
 local lunajson = require "lunajson"
 database:set_json_implementation(lunajson)
 local todos = database:from("todos"):select():execute()
+```
+
+Insert:
+
+```lua
+local values = {done = true, task = "insert support"}
+database:from("todos"):insert(values):execute()
 ```
 
 Vertical filtering:

@@ -27,6 +27,18 @@ local function jwt_encode(role)
     return token
 end
 
+-- restore the database to its original state
+local function restore_database()
+    local postgres_token = jwt_encode("postgres")
+    local url = api_base_url .. "/rpc/create_and_populate_todos"
+    local request = http_request.new_from_uri(url)
+    request.headers:upsert(":method", "POST")
+    request.headers:upsert("content-type", "application/json")
+    request.headers:upsert("authorization", "Bearer " .. postgres_token)
+    local headers, stream = assert(request:go())
+    FilterBuilder.raise_for_status(headers, stream)
+end
+
 describe("postgrest", function()
 
     describe("select", function()
@@ -150,16 +162,7 @@ describe("postgrest", function()
 
         local token = jwt_encode("todo_user")
 
-        after_each(function()
-            local postgres_token = jwt_encode("postgres")
-            local url = api_base_url .. "/rpc/create_and_populate_todos"
-            local request = http_request.new_from_uri(url)
-            request.headers:upsert(":method", "POST")
-            request.headers:upsert("content-type", "application/json")
-            request.headers:upsert("authorization", "Bearer " .. postgres_token)
-            local headers, stream = assert(request:go())
-            FilterBuilder.raise_for_status(headers, stream)
-        end)
+        after_each(function() restore_database() end)
 
         it("should not have the permission to update", function()
             local database = Database:new(api_base_url)
@@ -206,6 +209,44 @@ describe("postgrest", function()
             database:from("todos"):update(values):filter{id = 4}:execute()
             local todos = database:from("todos"):select("id", "done", "task")
                               :execute()
+            assert.same(expected, todos)
+        end)
+
+    end)
+
+    describe("insert", function()
+
+        local token = jwt_encode("todo_user")
+
+        after_each(function() restore_database() end)
+
+        it("should not have the permission to insert", function()
+            local database = Database:new(api_base_url)
+            local values = {task = "No permission to update without a token"}
+            local error_message =
+                'Request failed with status: 401 and body: ' ..
+                    '{"code":"42501","details":null,"hint":null,' ..
+                    '"message":"permission denied for table todos"}'
+            assert.has.errors(function()
+                database:from("todos"):insert(values):execute()
+            end, error_message)
+            -- data is unchanged
+            local todos = database:from("todos"):select():execute()
+            assert.same(default_rows, todos)
+        end)
+
+        it("should insert a new row", function()
+            local auth_headers = {authorization = "Bearer " .. token}
+            local database = Database:new(api_base_url, auth_headers)
+            local expected = {{id = 5, done = true, task = "insert support"}}
+            local values = {task = "insert support", done = true}
+            local todos = database:from("todos"):select("id", "done", "task")
+                              :filter{id = 5}:execute()
+            assert.same({}, todos)
+            database:from("todos"):insert(values):execute()
+            todos = database:from("todos"):select("id", "done", "task"):filter{
+                id = 5
+            }:execute()
             assert.same(expected, todos)
         end)
 

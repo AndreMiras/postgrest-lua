@@ -36,4 +36,11 @@ function QueryBuilder:update(values)
                              self.query_parameters, self.payload)
 end
 
+function QueryBuilder:insert(values)
+    self.method = "POST"
+    self.payload = values
+    return FilterBuilder:new(self.database, self.table_name, self.method,
+                             self.query_parameters, self.payload)
+end
+
 return QueryBuilder
