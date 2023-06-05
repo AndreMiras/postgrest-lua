@@ -122,16 +122,23 @@ Install dependencies:
 make luarocks
 ```
 
-Start the PostgreSQL database and the PostgREST service:
+Start the PostgreSQL database, the PostgREST service and load fixtures:
 
 ```sh
-docker compose up
+make docker/compose/recreate
+make docker/compose/psql/init
 ```
 
 Then run the tests:
 
 ```sh
 make test
+```
+
+Teardown everything:
+
+```sh
+make docker/compose/down
 ```
 
 ### Format & Lint
