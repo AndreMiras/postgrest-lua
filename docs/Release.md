@@ -15,3 +15,6 @@ This target will perform the following actions:
 - push the changes and tag
 
 Then the GitHub Action workflow will publish automatically to LuaRocks.
+
+Then click the new tag and generate/pin the latest release:
+https://github.com/AndreMiras/postgrest-lua/tags
