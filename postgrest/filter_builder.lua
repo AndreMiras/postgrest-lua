@@ -72,6 +72,7 @@ end
 
 function FilterBuilder:execute()
     local json_implementation = self.database:get_json_implementation_or_error()
+    local request_logger = self.database.request_logger
     local api_base_url = self.database.api_base_url
     local auth_headers = self.database.auth_headers
     local table_name = self.table_name
@@ -90,6 +91,9 @@ function FilterBuilder:execute()
     FilterBuilder.add_headers(request, auth_headers)
     if utils.table_length(payload) > 0 then
         request:set_body(json_implementation.encode(payload));
+    end
+    if request_logger then
+        request_logger(method, url, payload, request.headers)
     end
     local headers, stream = assert(request:go())
     local _, body = self.raise_for_status(headers, stream)

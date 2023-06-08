@@ -112,6 +112,17 @@ Delete:
 database:from("todos"):delete():filter{id = 4}:execute()
 ```
 
+## Logger
+
+It's possible to log the requests to the REST API by using a logger callback.
+
+```lua
+function request_logger(method, url, payload, headers)
+    print("method: " .. method .. " url: " .. url)
+end
+database.request_logger = request_logger
+```
+
 ## Development
 
 ### Tests
