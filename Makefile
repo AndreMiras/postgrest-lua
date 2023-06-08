@@ -85,7 +85,7 @@ release/push:
 release: release/prepare release/commit release/push
 
 test:
-	$(BUSTED) --coverage postgrest/
+	$(BUSTED) --verbose --coverage postgrest/
 
 coveralls:
 	$(LUA_COVERALLS) --verbose

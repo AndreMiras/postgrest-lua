@@ -21,7 +21,7 @@ function QueryBuilder:select(columns, ...)
         self.select_columns = {columns, ...}
     end
     self.select_str = #self.select_columns > 0 and "select=" ..
-                          table.concat(self.select_columns, ",") or ""
+                          table.concat(self.select_columns, ",") or nil
     if self.select_str then
         table.insert(self.query_parameters, self.select_str)
     end
