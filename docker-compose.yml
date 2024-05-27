@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   postgrest:
-    image: postgrest/postgrest:v11.0.0
+    image: postgrest/postgrest:v12.0.3
     depends_on:
       - db
     ports:
@@ -17,7 +17,7 @@ services:
     restart: unless-stopped
 
   db:
-    image: postgres:15
+    image: postgres:16
     ports:
       - "5432:5432"
     environment:

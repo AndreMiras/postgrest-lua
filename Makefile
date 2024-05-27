@@ -99,7 +99,7 @@ lint/luaformatter:
 lint/nodeprettier:
 	$(NODE_PRETTIER) --check *.md docs/ .github/
 
-lint: lint/luacheck lint/luaformatter
+lint: lint/luacheck lint/luaformatter lint/nodeprettier
 
 format/luaformatter:
 	$(LUA_FORMAT) --in-place *.rockspec postgrest/*.lua

@@ -39,10 +39,10 @@ With PostgREST:
 local Database = require "postgrest.database"
 local cjson = require "cjson"
 local api_base_url = "http://localhost:3000"
-local database = Database:new(api_base_url)
-local todos = database:from("todos"):select():execute()
+local db_instance = Database:new(api_base_url)
+local todos = db_instance:from("todos"):select():execute()
 -- or alternatively
-local todos = database("todos"):select():execute()
+local todos = db_instance("todos"):select():execute()
 cjson.encode(todos)
 ```
 
@@ -73,7 +73,7 @@ Insert:
 
 ```lua
 local values = {done = true, task = "insert support"}
-database:from("todos"):insert(values):execute()
+db_instance:from("todos"):insert(values):execute()
 ```
 
 Vertical filtering:
@@ -87,13 +87,13 @@ QueryBuilder:select{"column1", "column2"}
 Horizontal filtering:
 
 ```lua
-Database:from("todos"):select():filter{id__eq = 1}:execute()
+db_instance:from("todos"):select():filter{id__eq = 1}:execute()
 -- or alternatively
-Database:from("todos"):select():filter{id = 1}:execute()
+db_instance:from("todos"):select():filter{id = 1}:execute()
 -- or alternatively
-Database:from("todos"):select():filter("id=eq.1"):execute()
+db_instance:from("todos"):select():filter("id=eq.1"):execute()
 -- we also support the `in` operator using tables:
-Database:from("todos"):select():filter{id__in = {1, 2, 3}}:execute()
+db_instance:from("todos"):select():filter{id__in = {1, 2, 3}}:execute()
 ```
 
 Same goes for other operators described in the PostgREST documentation:
@@ -103,13 +103,13 @@ Updates:
 
 ```lua
 local values = {done = true, task = "learn lua"}
-Database:from("todos"):update(values):execute()
+db_instance:from("todos"):update(values):execute()
 ```
 
 Delete:
 
 ```lua
-Database:from("todos"):delete():filter{id = 4}:execute()
+db_instance:from("todos"):delete():filter{id = 4}:execute()
 ```
 
 ## Logger
